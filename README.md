@@ -36,11 +36,11 @@ docker run -dit --name apache -p 80:80 -v $PWD/usr/local/apache2/htdocs:/usr/loc
 > Inicia todos os contêineres  
 
 ```bash
-docker stop $(docker ps -a -q)
+docker start $(docker ps -a -q)
 ```
 
 > Para todos os contêineres  
 
 ```bash
-docker start $(docker ps -a -q)
+docker stop $(docker ps -a -q)
 ```
