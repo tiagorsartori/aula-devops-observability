@@ -14,7 +14,7 @@ Tiago Ramos Sartori
 ## Atuação
 
 > * Infraestrutura de TI;  
-> * Banco de Dados;  
+> * Banco de Dados ;  
 > * Segurança e Monitoramento de Informação;  
 > * Administração e Gerenciamento de Servidores Windows e Linux;  
 > * Telefonia IP;  
