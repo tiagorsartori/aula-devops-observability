@@ -41,7 +41,7 @@
 > apt upgrade
 > ```  
 
-## Instalando o docker e aplicativos uteis
+## Instalando o docker e aplicativos úteis
 
 > ```bash
 > apt install docker.io docker-compose vim ccze htop dnsutils net-tool
