@@ -59,6 +59,7 @@ docker run --name zabbix-server -e DB_SERVER_HOST=mysql -e MYSQL_USER=root -e MY
 ```bash
 docker run --name zabbix-web -e DB_SERVER_HOST=mysql -e MYSQL_DATABASE=zabbix -e MYSQL_USER=root -e MYSQL_PASSWORD=123Mudar@ --link mysql-server:mysql --link zabbix-server:zabbix-server -e ZBX_SERVER_HOST=zabbix-server -e PHP_TZ=America/Sao_Paulo -p 8080:8080 -p 8443:8443 -d zabbix/zabbix-web-apache-mysql:latest
 ```
+
 > **Usuario: Admin Senha: zabbix**
 
 ## Executa um contêiner com Suricata  
