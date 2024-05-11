@@ -1,6 +1,7 @@
 # Apresentação
 
-![Tiago Ramos Sartori](perfil.jpg)  
+<img src="perfil.jpg" width="30%" height="30%" alt="Tiago Ramos Sartori">
+
 Tiago Ramos Sartori
 
 ## Formação
