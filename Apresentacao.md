@@ -1,6 +1,6 @@
 # Apresentação
 
-![Tiago Ramos Sartori](https://media.licdn.com/dms/image/C4D03AQEOfDzQcur1dg/profile-displayphoto-shrink_200_200/0/1626275821632?e=1712793600&v=beta&t=YXFMG1D-r-w-UG17lhNPPznTfzPzvUVQMTAXhoFNZYE)  
+![Tiago Ramos Sartori](perfil.jpg)  
 Tiago Ramos Sartori
 
 ## Formação
@@ -18,4 +18,5 @@ Tiago Ramos Sartori
 > * Segurança e Monitoramento de Informação;  
 > * Administração e Gerenciamento de Servidores Windows e Linux;  
 > * Telefonia IP;  
+> * Virtualização;  
 > * **Atualmente como Gestor de Infraestrutura de TI no Grupo Integrado.**  
