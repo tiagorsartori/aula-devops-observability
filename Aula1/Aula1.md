@@ -1,5 +1,37 @@
 # Criando ambiente com contêineres
 
+## Comandos úteis  
+
+### Lista todos os contêineres  
+
+```bash
+docker ps -a
+```
+
+### Inicia todos os contêineres iniciados  
+
+```bash
+docker ps
+```
+
+### Calcula o tamanho utilisado pelos contêineres  
+
+```bash
+docker start $(docker ps -a -q)
+```
+
+### Inicia todos os contêineres  
+
+```bash
+docker start $(docker ps -a -q)
+```
+
+### Para todos os contêineres  
+
+```bash
+docker stop $(docker ps -a -q)
+```
+
 ## Executa um contêiner com MySQL Server versão 8.0
 
 ```bash
@@ -74,14 +106,28 @@ docker run -it --name suricata --net=host --cap-add=net_admin --cap-add=net_raw 
 docker run -dit --name apache -p 80:80 -v $PWD/usr/local/apache2/htdocs:/usr/local/apache2/htdocs/ httpd:2.4
 ```
 
-## Inicia todos os contêineres  
+## Executa um contêiner com Grafana  
 
 ```bash
-docker start $(docker ps -a -q)
+docker run -d --name=grafana -p 3000:3000 grafana/grafana
 ```
 
-## Para todos os contêineres  
 
-```bash
-docker stop $(docker ps -a -q)
-```
+
+
+
+
+
+
+https://documentation.wazuh.com/current/deployment-options/docker/wazuh-container.html
+git clone https://github.com/wazuh/wazuh-docker.git -b v4.7.4
+cd wazuh-docker/single-node/
+docker-compose -f generate-indexer-certs.yml run --rm generator
+docker-compose up -d
+wget https://packages.wazuh.com/4.x/apt/pool/main/w/wazuh-agent/wazuh-agent_4.7.4-1_amd64.deb && sudo WAZUH_MANAGER='127.0.0.1' dpkg -i ./wazuh-agent_4.7.4-1_amd64.deb
+service wazuh-agent start
+
+apt-get update && apt-get install python3
+apt-get install python3-pip
+pip3 install docker==4.2.0 urllib3==1.26.18
+

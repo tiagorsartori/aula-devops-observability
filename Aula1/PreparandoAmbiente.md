@@ -44,7 +44,7 @@
 ## Instalando o docker e aplicativos úteis
 
 > ```bash
-> apt install docker.io docker-compose vim ccze htop dnsutils net-tools
+> apt install docker.io docker-compose vim ccze htop dnsutils net-tools wget
 > ```  
 
 ## Verificando as versões instaladas
