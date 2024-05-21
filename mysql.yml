@@ -1,0 +1,20 @@
+# Mysql
+version: '3.7'
+
+services:
+  mysql-server:
+    image: mysql:8.0
+    hostname: mysql-server
+    restart: always
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 655360
+        hard: 655360
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 123Mudar@
+    
