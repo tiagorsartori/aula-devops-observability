@@ -112,13 +112,6 @@ docker run -dit --name apache -p 80:80 -v $PWD/usr/local/apache2/htdocs:/usr/loc
 docker run -d --name=grafana -p 3000:3000 grafana/grafana
 ```
 
-
-
-
-
-
-
-
 https://documentation.wazuh.com/current/deployment-options/docker/wazuh-container.html
 git clone https://github.com/wazuh/wazuh-docker.git -b v4.7.4
 cd wazuh-docker/single-node/
@@ -130,4 +123,3 @@ service wazuh-agent start
 apt-get update && apt-get install python3
 apt-get install python3-pip
 pip3 install docker==4.2.0 urllib3==1.26.18
-
