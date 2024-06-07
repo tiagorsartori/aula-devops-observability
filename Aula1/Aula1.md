@@ -123,3 +123,33 @@ service wazuh-agent start
 apt-get update && apt-get install python3
 apt-get install python3-pip
 pip3 install docker==4.2.0 urllib3==1.26.18
+
+
+- zabbix
+    - agent
+    - scripts
+    - itens
+    - logs
+    - triggers
+- mysql
+    - logs
+    - permissões de acesso
+- suricata
+    - rules
+    - logs
+- grafana
+    - plugins
+    - data sources
+    - paineis
+- apache
+    - logs
+    - virtual hosts
+    - modulos
+- wordpress
+    - banco de dados
+    - config.inc.php
+    - pastas e arquivos "coringa" para os testes
+- wazuh
+    - instalação do agent nas vms monitoradas
+    - nível de exibição dos alertas
+    - módulos ativos

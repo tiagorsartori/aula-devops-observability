@@ -1,0 +1,21 @@
+# Wordpress
+version: '3.7'
+
+services:
+  wordpress:
+    image: bitnami/wordpress:6
+    container_name: wordpress
+    restart: unless-stopped
+    environment:
+     - ALLOW_EMPTY_PASSWORD=yes
+     - WORDPRESS_DATABASE_HOST=mysql
+     - WORDPRESS_DATABASE_PORT_NUMBER=3306
+     - WORDPRESS_DATABASE_USER=bn_wordpress
+     - WORDPRESS_DATABASE_NAME=bitnami_wordpress
+    ports:
+     - '8880:8080'
+     - '8843:8443'
+    volumes:
+     - 'wordpress_data:/usr/bitnami/wordpresss'
+volumes:
+  wordpress_data:
