@@ -1,44 +1,210 @@
-# Criando ambiente com contêineres
+# Monitoramento e observabilidade - Segurança
 
-## Comandos úteis  
+## :memo: Agenda
 
-### Lista todos os contêineres  
+* Como serão as aulas;  
+* Apresentação;  
+* Conceitos;  
+* Preparação do ambiente;  
+* Instalação dos contêineres;  
+* Configuração das aplicações;  
+* Simulando ataques no ambiente;  
+* Coleta de informações;  
+* Trabalhando com logs;  
+* Criando dashboards com os indicadores;  
+* Configurando notificações;  
+* Automatizando a criação do ambiente;  
+
+## Apresentação
+
+![Tiago Ramos Sartori](perfil.jpg)  
+Tiago Ramos Sartori
+
+### Formação
+
+* Tecnologia e Análise em Desenvolvimento de Sistemas | Integrado;  
+* Administração de Banco de Dados Oracle | Integrado;  
+* Redes de Computadores e Segurança | Integrado;  
+* MBA em Gerenciamento de Projetos | Integrado;  
+* MBA em Liderança e Estratégia Educacional | Integrado;  
+
+### Atuação
+
+* Infraestrutura de TI;  
+* Banco de Dados;  
+* Segurança e Monitoramento de Informação;  
+* Administração e Gerenciamento de Servidores Windows e Linux;  
+* Telefonia IP;  
+* Virtualização;  
+* **Atualmente como Gestor de Infraestrutura de TI no Grupo Integrado.**  
+
+## Como serão as aulas
+
+* Conceitos;
+* Visão geral das ferramentas;
+* Preparação e configuração do ambiente;
+* Instalação e configuração das ferramentas;
+* Testes e criação de dashboards;
+
+## Conceitos
+
+* O que é observabilidade?
+  * É a capacidade de analisar, explorar, coletar métricas de um sistema ou ambiente em produção, identificando e entendendo seus padrões de comportamento para extrair dados sobre seu funcionamento, emitindo alertas para solucionar e resolver incidentes de performance, disponibilidade e segurança.
+  
+  * Inicialmente aplicado ao maquinário da indústria, o conceito de observabilidade vem cada vez sendo mais aplicado na tecnologia, devido aos sistemas e ambientes, que muitas vezes compartilham recursos em servidores e cloud, geralmente de alta complexidade, o que torna necessária a integração também da segurança de todos esses recursos e aplicações.
+    * Adaptado de: [https://www.softwall.com.br/blog/observabilidade-ti-o-que-e-pilares/](https://www.softwall.com.br/blog/observabilidade-ti-o-que-e-pilares/)  
+
+* Observabilidade de segurança para aplicações web
+  * Observar aplicações web tem a finalidade de tentar identificar comportamentos suspeitos, falhas ou anomalias no ambiente.
+  * Os dados coletados nessas análises gera conteúdo para que equipes de desenvolvimento e segurança possam implementar melhorias em códigos, políticas e processos, mitigando futuros impactos.
+
+* Os 3 pilares da observabilidade:
+  * Logs
+    * É o registro de alguma ação, contendo data, hora, local e o ocorrido.
+  * Métricas
+    * São indicadores passíveis de mensuração e identificação dentro do ambiente.
+  * Rastreio
+    * É o fluxo percorrido do acesso até a execução de uma ação do ambiente.
+
+|     | Monitoramento | Observabilidade |
+|-----|---------------|-----------------|
+| O que é? | Medir e gerar relatórios sobre métricas específicas em um sistema, para garantir a integridade do sistema. | Coletando métricas, eventos, logs e rastreamentos para permitir uma investigação profunda sobre problemas de saúde em sistemas distribuídos com arquiteturas de microsserviços. |
+| Foco principal                  | Coletar dados para identificar efeitos anômalos no sistema. | Investigar a causa raiz dos efeitos anômalos do sistema. |
+| Sistemas envolvidos | Normalmente se preocupa com sistemas autônomos. | Normalmente se preocupa com sistemas múltiplos e díspares. |
+| Rastreabilidade | Limitado às bordas do sistema. | Disponível onde os sinais são emitidos em diferentes arquiteturas de sistema. |
+| Descobertas de erros do sistema | O quando e o quê. | O porquê e o como. |
+    *   Fonte: [https://aws.amazon.com/pt/compare/the-difference-between-monitoring-and-observability/
+    ](Fonte: https://aws.amazon.com/pt/compare/the-difference-between-monitoring-and-observability/)
+
+## Visão geral das ferramentas
+
+* **O que é o Zabbix?**
+  * O Zabbix foi criado por Alexei Vladishev, e atualmente é ativamente desenvolvido e mantido por Zabbix SIA.
+  * O Zabbix é uma solução de nível enterprise, de código aberto e com suporte a monitoração distribuída.
+  * O Zabbix é um software que monitora numerosos parâmetros de rede, a saúde e integridade de servidores, máquinas virtuais, aplicações, serviços, banco de dados, websites, a nuvem e muito mais. O Zabbix usa um mecanismo flexível de notificação que permite aos usuários configurar alertas baseados em e-mail para praticamente qualquer evento. Isso permite uma resposta rápida para problemas do servidor. O Zabbix oferece um excelente recurso de relatórios e visualização de dados baseados em dados armazenados. Isso torna o Zabbix ideal para gerenciamento de capacidade.
+  * O Zabbix suporta tanto "pooling" quanto "trapping". Todos os relatórios e estatísticas, bem como os parâmetros de configuração são acessados através de um frontend baseado web. Um frontend baseado na web garante que o status de sua rede e a integridade de seus servidores podem ser avaliadas a partir de qualquer localização. Devidamente configurado, o Zabbix pode desempenhar um papel importante no monitoramento da infraestrutura de TI. Isto é igualmente verdadeiro para pequenas organizações com poucos servidores e para grandes empresas com milhares de servidores.
+  * O Zabbix é gratuito. Zabbix é escrito e distribuído sob a GPL General Public License versão 2. Isso significa que seu código fonte é distribuído gratuitamente e disponível para o público em geral.
+  * [https://www.zabbix.com/](https://www.zabbix.com/)
+  * [https://www.zabbix.com/documentation/current/pt/manual](https://www.zabbix.com/documentation/current/pt/manual)
+
+* **O que é o Wazuh?**
+  * Wazuh entrega uma solução robusta de proteção e monitoramento de segurança para os ativos de TI utilizando SIEM (Security Information and Event Management) e XDR (Extended Detection and Response).
+  * Casos de uso:
+    * Configuration Assessment
+    * Threat Hunting
+    * Incident Response
+    * Containers Security
+    * Malware Detection
+    * Log Data Analysis
+    * Regulatory Compliance
+    * Posture Management
+    * File Integrity Monitoring
+    * Vulnerability Detection
+    * IT Hygiene
+    * Workload Protection
+  * [https://wazuh.com/](https://wazuh.com/)
+  * [https://wazuh.com/platform/overview/](https://wazuh.com/platform/overview/)
+  * [https://documentation.wazuh.com/current/index.html](https://wazuh.com/platform/overview/)
+
+* **O que é o Suricata?**
+  * Suricata é um IDS, IPS e um moto de monitoramento e segurança de rede de alta performance. É mantido e desenvolvido por uma comunidade sem fins lucrativos a Open Information Security Foundation (OISF).
+  * [https://suricata.io/](https://suricata.io/)
+  * [https://suricata.io/documentation/](https://suricata.io/documentation/)
+  * [https://docs.suricata.io/en/latest/what-is-suricata.html](https://docs.suricata.io/en/latest/what-is-suricata.html)
+
+* **O que é o Grafana?**
+  * Grafana é uma poderosa interface com visões flexíveis de praticamente qualquer tipo de informação que possa ser coletada, logs, métricas, indicadores, rastreios, etc.
+  * [https://grafana.com/](https://grafana.com/)
+  * [https://grafana.com/grafana/](https://grafana.com/grafana/)
+  * [https://grafana.com/docs/](https://grafana.com/docs/)
+
+## Preparação do ambiente
+
+* Instalação VirtualBox
+  * Criação de uma Máquina virtual - Debian - SSH
+  * 2 ou 4 vCPU;
+  * 4gb de memória RAM;
+  * 50gb de HD;
+  * Instalação e configuração do ambiente conteinerizado para simulação das ferramentas;
+* Criação de uma Máquina virtual - Kali
+  * 2 ou 4 vCPU;
+  * 4gb de memória RAM;
+  * 50gb de HD;
+  * Instalação com as ferramentas padrão de análise de vulnerabilidades;
+
+* Instalação dos programas básicos para o ambiente;
+  * Atualizando a lista de pacotes disponíveis no repositório do sistema;
+        
+  ```bash
+  apt update
+  ```
+  
+    * Atualizando os pacotes instalados no sistema;
+
+  ```bash
+  apt upgrade
+  ```
+
+  * Instalando o docker e aplicativos úteis;  
+
+  ```bash
+  apt install docker.io docker-compose vim ccze htop dnsutils net-tools wget python3 python3-pip unzip
+  ```
+
+  * Verificando as versões instaladas
+
+  ```bash
+  docker --version
+  docker-compose –version
+  ```
+
+  * Verificando status do serviço
+
+  ```bash
+  Service docker status
+  ```
+
+## Instalação dos contêineres
+
+### Comandos úteis  
+
+#### Lista todos os contêineres  
 
 ```bash
 docker ps -a
 ```
 
-### Inicia todos os contêineres iniciados  
+#### Inicia todos os contêineres iniciados  
 
 ```bash
 docker ps
 ```
 
-### Calcula o tamanho utilisado pelos contêineres  
+#### Calcula o tamanho utilisado pelos contêineres  
 
 ```bash
 docker start $(docker ps -a -q)
 ```
 
-### Inicia todos os contêineres  
+#### Inicia todos os contêineres  
 
 ```bash
 docker start $(docker ps -a -q)
 ```
 
-### Para todos os contêineres  
+#### Para todos os contêineres  
 
 ```bash
 docker stop $(docker ps -a -q)
 ```
 
-## Executa um contêiner com MySQL Server versão 8.0
+### Executa um contêiner com MySQL Server versão 8.0
 
 ```bash
 docker run --name mysql-server -e MYSQL_ROOT_PASSWORD=123Mudar@ -p 3306:3306 -d mysql:8.0
 ```
 
-### Verificando as portas TCP abertas
+#### Verificando as portas TCP abertas
 
 > ```bash
 > netstat -ant
@@ -80,13 +246,13 @@ docker run --name mysql-server -e MYSQL_ROOT_PASSWORD=123Mudar@ -p 3306:3306 -d 
 > MySQL [(none)]>
 > ```
 
-## Executa um contêiner com Zabbix Server  
+### Executa um contêiner com Zabbix Server  
 
 ```bash
 docker run --name zabbix-server -e DB_SERVER_HOST=mysql -e MYSQL_USER=root -e MYSQL_PASSWORD=123Mudar@ --link mysql-server:mysql --init -d -p 10051:10051 zabbix/zabbix-server-mysql:latest
 ```
 
-## Executa um contêiner com Zabbix Web Server Linkado ao Zabbix Server e ao MySQL Server  
+### Executa um contêiner com Zabbix Web Server Linkado ao Zabbix Server e ao MySQL Server  
 
 ```bash
 docker run --name zabbix-web -e DB_SERVER_HOST=mysql -e MYSQL_DATABASE=zabbix -e MYSQL_USER=root -e MYSQL_PASSWORD=123Mudar@ --link mysql-server:mysql --link zabbix-server:zabbix-server -e ZBX_SERVER_HOST=zabbix-server -e PHP_TZ=America/Sao_Paulo -p 8080:8080 -p 8443:8443 -d zabbix/zabbix-web-apache-mysql:latest
@@ -94,62 +260,65 @@ docker run --name zabbix-web -e DB_SERVER_HOST=mysql -e MYSQL_DATABASE=zabbix -e
 
 > **Usuario: Admin Senha: zabbix**
 
-## Executa um contêiner com Suricata  
+### Executa um contêiner com Suricata  
 
 ```bash
 docker run -it --name suricata --net=host --cap-add=net_admin --cap-add=net_raw --cap-add=sys_nice -v $(pwd)/logs:/var/log/suricata -v $(pwd)/etc:/etc/suricata -d jasonish/suricata:latest -i eth0
 ```
 
-## Executa um contêiner com Apache WebServer  
+### Executa um contêiner com Apache WebServer  
 
 ```bash
 docker run -dit --name apache -p 80:80 -v $PWD/usr/local/apache2/htdocs:/usr/local/apache2/htdocs/ httpd:2.4
 ```
 
-## Executa um contêiner com Grafana  
+### Executa um contêiner com Grafana  
 
 ```bash
 docker run -d --name=grafana -p 3000:3000 grafana/grafana
 ```
 
-https://documentation.wazuh.com/current/deployment-options/docker/wazuh-container.html
-git clone https://github.com/wazuh/wazuh-docker.git -b v4.7.4
+<https://documentation.wazuh.com/current/deployment-options/docker/wazuh-container.html>
+git clone <https://github.com/wazuh/wazuh-docker.git> -b v4.7.4
 cd wazuh-docker/single-node/
 docker-compose -f generate-indexer-certs.yml run --rm generator
 docker-compose up -d
-wget https://packages.wazuh.com/4.x/apt/pool/main/w/wazuh-agent/wazuh-agent_4.7.4-1_amd64.deb && sudo WAZUH_MANAGER='127.0.0.1' dpkg -i ./wazuh-agent_4.7.4-1_amd64.deb
+wget <https://packages.wazuh.com/4.x/apt/pool/main/w/wazuh-agent/wazuh-agent_4.7.4-1_amd64.deb> && sudo WAZUH_MANAGER='127.0.0.1' dpkg -i ./wazuh-agent_4.7.4-1_amd64.deb
 service wazuh-agent start
 
 apt-get update && apt-get install python3
 apt-get install python3-pip
 pip3 install docker==4.2.0 urllib3==1.26.18
 
+* zabbix
+  * agent
+  * scripts
+  * itens
+  * logs
+  * triggers
+* mysql
+  * logs
+  * permissões de acesso
+* suricata
+  * rules
+  * logs
+* grafana
+  * plugins
+  * data sources
+  * paineis
+* apache
+  * logs
+  * virtual hosts
+  * modulos
+* wordpress
+  * banco de dados
+  * config.inc.php
+  * pastas e arquivos "coringa" para os testes
+* wazuh
+  * instalação do agent nas vms monitoradas
+  * nível de exibição dos alertas
+  * módulos ativos
 
-- zabbix
-    - agent
-    - scripts
-    - itens
-    - logs
-    - triggers
-- mysql
-    - logs
-    - permissões de acesso
-- suricata
-    - rules
-    - logs
-- grafana
-    - plugins
-    - data sources
-    - paineis
-- apache
-    - logs
-    - virtual hosts
-    - modulos
-- wordpress
-    - banco de dados
-    - config.inc.php
-    - pastas e arquivos "coringa" para os testes
-- wazuh
-    - instalação do agent nas vms monitoradas
-    - nível de exibição dos alertas
-    - módulos ativos
+# Tentativa acesso ao console Mikrotik Centro
+
+UserParameter=tentativa-acesso-console-mkCentro,/usr/local/bin/zabbix.sh "login failure for user" "/var/log/routerOS/10.2.1.1.log"
