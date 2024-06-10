@@ -133,7 +133,7 @@ Tiago Ramos Sartori
   * 50gb de HD;
   * Instalação com as ferramentas padrão de análise de vulnerabilidades;
 
-## Log para o professor
+### Log para o professor
 
 > script nome_data.txt  
 > script tiago_05-07-2024.txt  
@@ -189,7 +189,7 @@ docker ps
 #### Calcula o tamanho utilisado pelos contêineres  
 
 ```bash
-docker start $(docker ps -a -q)
+docker ps -s
 ```
 
 #### Inicia todos os contêineres  
@@ -429,13 +429,23 @@ volumes:
   grafana_storage:
 ```
 
-<https://documentation.wazuh.com/current/deployment-options/docker/wazuh-container.html>
-git clone <https://github.com/wazuh/wazuh-docker.git> -b v4.7.4
+### Executa os contêineres com Wazuh  
+
+[https://documentation.wazuh.com/current/deployment-options/docker/wazuh-container.html](https://documentation.wazuh.com/current/deployment-options/docker/wazuh-container.html)
+
+```bash
+git clone https://github.com/wazuh/wazuh-docker.git -b v4.7.4
+
 cd wazuh-docker/single-node/
+
 docker-compose -f generate-indexer-certs.yml run --rm generator
+
 docker-compose up -d
-wget <https://packages.wazuh.com/4.x/apt/pool/main/w/wazuh-agent/wazuh-agent_4.7.4-1_amd64.deb> && sudo WAZUH_MANAGER='127.0.0.1' dpkg -i ./wazuh-agent_4.7.4-1_amd64.deb
+
+wget https://packages.wazuh.com/4.x/apt/pool/main/w/wazuh-agent/wazuh-agent_4.7.4-1_amd64.deb && sudo WAZUH_MANAGER='127.0.0.1' dpkg -i ./wazuh-agent_4.7.4-1_amd64.deb
+
 service wazuh-agent start
+```
 
 * zabbix
   * agent
@@ -468,4 +478,6 @@ service wazuh-agent start
 
 ## Tentativa acesso ao console Mikrotik Centro
 
+```conf
 UserParameter=tentativa-acesso-console-mkCentro,/usr/local/bin/zabbix.sh "login failure for user" "/var/log/routerOS/10.2.1.1.log"
+```
