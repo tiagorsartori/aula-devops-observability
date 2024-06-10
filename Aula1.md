@@ -73,8 +73,9 @@ Tiago Ramos Sartori
 | Sistemas envolvidos | Normalmente se preocupa com sistemas autônomos. | Normalmente se preocupa com sistemas múltiplos e díspares. |
 | Rastreabilidade | Limitado às bordas do sistema. | Disponível onde os sinais são emitidos em diferentes arquiteturas de sistema. |
 | Descobertas de erros do sistema | O quando e o quê. | O porquê e o como. |
-    *   Fonte: [https://aws.amazon.com/pt/compare/the-difference-between-monitoring-and-observability/
-    ](Fonte: https://aws.amazon.com/pt/compare/the-difference-between-monitoring-and-observability/)
+
+* Fonte: [https://aws.amazon.com/pt/compare/the-difference-between-monitoring-and-observability/
+    ](https://aws.amazon.com/pt/compare/the-difference-between-monitoring-and-observability/)
 
 ## Visão geral das ferramentas
 
@@ -132,14 +133,19 @@ Tiago Ramos Sartori
   * 50gb de HD;
   * Instalação com as ferramentas padrão de análise de vulnerabilidades;
 
+## Log para o professor
+
+> script nome_data.txt  
+> script tiago_05-07-2024.txt  
+
 * Instalação dos programas básicos para o ambiente;
   * Atualizando a lista de pacotes disponíveis no repositório do sistema;
-        
+
   ```bash
   apt update
   ```
   
-    * Atualizando os pacotes instalados no sistema;
+  * Atualizando os pacotes instalados no sistema;
 
   ```bash
   apt upgrade
@@ -204,6 +210,29 @@ docker stop $(docker ps -a -q)
 docker run --name mysql-server -e MYSQL_ROOT_PASSWORD=123Mudar@ -p 3306:3306 -d mysql:8.0
 ```
 
+```yml
+# Mysql
+version: '3.7'
+
+services:
+  mysql-server:
+    image: mysql:8.0
+    hostname: mysql-server
+    restart: always
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 655360
+        hard: 655360
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 123Mudar@
+    
+```
+
 #### Verificando as portas TCP abertas
 
 > ```bash
@@ -258,24 +287,146 @@ docker run --name zabbix-server -e DB_SERVER_HOST=mysql -e MYSQL_USER=root -e MY
 docker run --name zabbix-web -e DB_SERVER_HOST=mysql -e MYSQL_DATABASE=zabbix -e MYSQL_USER=root -e MYSQL_PASSWORD=123Mudar@ --link mysql-server:mysql --link zabbix-server:zabbix-server -e ZBX_SERVER_HOST=zabbix-server -e PHP_TZ=America/Sao_Paulo -p 8080:8080 -p 8443:8443 -d zabbix/zabbix-web-apache-mysql:latest
 ```
 
+```yml
+# Zabbix server
+version: '3.7'
+
+services:
+  zabbix-server:
+    image: zabbix/zabbix-server-mysql:latest
+    init: true
+    hostname: zabbix-server
+    restart: always
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 655360
+        hard: 655360
+    ports:
+      - "10051:10051"
+    environment:
+      DB_SERVER_HOST: 172.17.0.1
+      DB_SERVER_PORT: 3306
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 123Mudar@
+
+  zabbix-web:
+    image: zabbix/zabbix-web-apache-mysql:latest
+    init: true
+    hostname: zabbix-web
+    restart: always
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 655360
+        hard: 655360
+    ports:
+      - "8080:8080"
+      - "8443:8443"
+    environment:
+      DB_SERVER_HOST: 172.17.0.1
+      DB_SERVER_PORT: 3306
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 123Mudar@
+      MYSQL_DATABASE: zabbix
+      ZBX_SERVER_HOST: 172.17.0.1
+      ZBX_SERVER_PORT: 10051
+      PHP_TZ: America/Sao_Paulo
+```
+
 > **Usuario: Admin Senha: zabbix**
 
 ### Executa um contêiner com Suricata  
 
 ```bash
-docker run -it --name suricata --net=host --cap-add=net_admin --cap-add=net_raw --cap-add=sys_nice -v $(pwd)/logs:/var/log/suricata -v $(pwd)/etc:/etc/suricata -d jasonish/suricata:latest -i eth0
+docker run -it --name suricata --net=host --cap-add=net_admin --cap-add=net_raw --cap-add=sys_nice -v /var/log/suricata:/var/log/suricata -v /etc/suricata:/etc/suricata -d jasonish/suricata:latest -i eth0
+```
+
+```yml
+# Suricata
+version: '3.7'
+
+services:
+  suricata:
+    image: jasonish/suricata:latest
+    hostname: suricata
+    restart: always
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 655360
+        hard: 655360
+    cap_add:
+      - net_admin
+      - net_raw
+      - sys_nice
+    network_mode: host
+    volumes:
+      - '/var/log/suricata:/var/log/suricata'
+      - '/etc/suricata:/etc/suricata'
+      - '/var/lib/suricata/rules/my.rule:/var/lib/suricata/rules/my.rule'
+    environment:
+      SURICATA_OPTIONS: "-i enp0s3"
 ```
 
 ### Executa um contêiner com Apache WebServer  
 
 ```bash
-docker run -dit --name apache -p 80:80 -v $PWD/usr/local/apache2/htdocs:/usr/local/apache2/htdocs/ httpd:2.4
+docker run -dit --name apache -p 80:80 -v /usr/local/apache2/htdocs:/usr/local/apache2/htdocs/ httpd:2.4
+```
+
+```yml
+# Apache-httpd
+version: '3.7'
+
+services:
+  apache:
+    image: httpd:2.4
+    hostname: apache-httpd
+    restart: always
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 655360
+        hard: 655360
+    ports:
+      - "80:80"
+    volumes:
+      - '/usr/local/apache2/htdocs:/usr/local/apache2/htdocs'
 ```
 
 ### Executa um contêiner com Grafana  
 
 ```bash
 docker run -d --name=grafana -p 3000:3000 grafana/grafana
+```
+
+```yml
+# Grafana
+version: '3.7'
+
+services:
+  grafana:
+    image: grafana/grafana-enterprise
+    container_name: grafana
+    restart: unless-stopped
+    environment:
+     - GF_SERVER_ROOT_URL=http://my.grafana.server/
+     - GF_INSTALL_PLUGINS=grafana-clock-panel
+    ports:
+     - '3000:3000'
+    volumes:
+     - grafana_storage:/var/lib/grafana
+volumes:
+  grafana_storage:
 ```
 
 <https://documentation.wazuh.com/current/deployment-options/docker/wazuh-container.html>
@@ -285,10 +436,6 @@ docker-compose -f generate-indexer-certs.yml run --rm generator
 docker-compose up -d
 wget <https://packages.wazuh.com/4.x/apt/pool/main/w/wazuh-agent/wazuh-agent_4.7.4-1_amd64.deb> && sudo WAZUH_MANAGER='127.0.0.1' dpkg -i ./wazuh-agent_4.7.4-1_amd64.deb
 service wazuh-agent start
-
-apt-get update && apt-get install python3
-apt-get install python3-pip
-pip3 install docker==4.2.0 urllib3==1.26.18
 
 * zabbix
   * agent
@@ -319,6 +466,6 @@ pip3 install docker==4.2.0 urllib3==1.26.18
   * nível de exibição dos alertas
   * módulos ativos
 
-# Tentativa acesso ao console Mikrotik Centro
+## Tentativa acesso ao console Mikrotik Centro
 
 UserParameter=tentativa-acesso-console-mkCentro,/usr/local/bin/zabbix.sh "login failure for user" "/var/log/routerOS/10.2.1.1.log"
