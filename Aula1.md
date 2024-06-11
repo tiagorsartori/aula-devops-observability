@@ -9,7 +9,7 @@
 * Instalação dos contêineres;  
 * Configuração das aplicações;  
 * Simulando ataques no ambiente;  
-* Coleta de informações;  
+* Verificando informações coletadas;  
 * Trabalhando com logs;  
 * Criando dashboards com os indicadores;  
 * Configurando notificações;  
@@ -403,6 +403,24 @@ services:
       - '/usr/local/apache2/htdocs:/usr/local/apache2/htdocs'
 ```
 
+### Executa os contêineres com Wazuh  
+
+[https://documentation.wazuh.com/current/deployment-options/docker/wazuh-container.html](https://documentation.wazuh.com/current/deployment-options/docker/wazuh-container.html)
+
+```bash
+git clone https://github.com/wazuh/wazuh-docker.git -b v4.7.4
+
+cd wazuh-docker/single-node/
+
+docker-compose -f generate-indexer-certs.yml run --rm generator
+
+docker-compose up -d
+
+wget https://packages.wazuh.com/4.x/apt/pool/main/w/wazuh-agent/wazuh-agent_4.7.4-1_amd64.deb && sudo WAZUH_MANAGER='127.0.0.1' dpkg -i ./wazuh-agent_4.7.4-1_amd64.deb
+
+service wazuh-agent start
+```
+
 ### Executa um contêiner com Grafana  
 
 ```bash
@@ -429,55 +447,187 @@ volumes:
   grafana_storage:
 ```
 
-### Executa os contêineres com Wazuh  
-
-[https://documentation.wazuh.com/current/deployment-options/docker/wazuh-container.html](https://documentation.wazuh.com/current/deployment-options/docker/wazuh-container.html)
+### Executa um contêiner com Wordpress
 
 ```bash
-git clone https://github.com/wazuh/wazuh-docker.git -b v4.7.4
+docker run --name wordpress bitnami/wordpress:latest
 
-cd wazuh-docker/single-node/
-
-docker-compose -f generate-indexer-certs.yml run --rm generator
-
-docker-compose up -d
-
-wget https://packages.wazuh.com/4.x/apt/pool/main/w/wazuh-agent/wazuh-agent_4.7.4-1_amd64.deb && sudo WAZUH_MANAGER='127.0.0.1' dpkg -i ./wazuh-agent_4.7.4-1_amd64.deb
-
-service wazuh-agent start
+docker-compose -f wordpress.yml wordpress up –d
 ```
 
-* zabbix
-  * agent
-  * scripts
-  * itens
-  * logs
-  * triggers
+> [http://localhost:8880](http://localhost:8880) - Usuário: user Senha: bitnami
+
+[https://github.com/bitnami/containers/blob/main/bitnami/wordpress/README.md](https://github.com/bitnami/containers/blob/main/bitnami/wordpress/README.md)
+
+```yml
+# Wordpress
+version: '3.7'
+
+services:
+  wordpress:
+    image: bitnami/wordpress:6
+    container_name: wordpress
+    restart: unless-stopped
+    environment:
+     - ALLOW_EMPTY_PASSWORD=yes
+     - WORDPRESS_DATABASE_HOST=mysql
+     - WORDPRESS_DATABASE_PORT_NUMBER=3306
+     - WORDPRESS_DATABASE_USER=bn_wordpress
+     - WORDPRESS_DATABASE_NAME=bitnami_wordpress
+    ports:
+     - '8880:8080'
+     - '8843:8443'
+    volumes:
+     - 'wordpress_data:/usr/bitnami/wordpresss'
+volumes:
+  wordpress_data:
+```
+
+## Configuração das aplicações
+
+* Zabbix
+  * Agent
+    * Instalação do agente para o server e para os dispositivos monitorados
+  * Scripts
+    * Scripts para coleta de coordenada geográfica
+    * Scripts para análise de logs
+  * Itens
+  * Logs
 * mysql
   * logs
   * permissões de acesso
 * suricata
   * rules
+    * suricata-update
   * logs
 * grafana
   * plugins
+    * [https://grafana.com/grafana/plugins/alexanderzobnin-zabbix-app/?tab=overview](https://grafana.com/grafana/plugins/alexanderzobnin-zabbix-app/?tab=overview)
+    * [https://storage.googleapis.com/integration-artifacts/alexanderzobnin-zabbix-app/release/4.4.9/linux/alexanderzobnin-zabbix-app-4.4.9.linux_amd64.zip](https://storage.googleapis.com/integration-artifacts/alexanderzobnin-zabbix-app/release/4.4.9/linux/alexanderzobnin-zabbix-app-4.4.9.linux_amd64.zip)
+    * [http://192.168.0.149:8080/api_jsonrpc.php](http://192.168.0.149:8080/api_jsonrpc.php)
   * data sources
-  * paineis
+    * zabbix
 * apache
   * logs
   * virtual hosts
   * modulos
 * wordpress
   * banco de dados
+    * Criar um banco de dados com nome bitnami_wordpress
   * config.inc.php
   * pastas e arquivos "coringa" para os testes
 * wazuh
-  * instalação do agent nas vms monitoradas
-  * nível de exibição dos alertas
-  * módulos ativos
+  * Instalação do agent nas VMs monitoradas
+  * Nível de exibição dos alertas
+    * Management -> Coonfiguration -> Edit configuration
+      * <log_alert_level>3</log_alert_level>
+  * Módulos ativos
+  * Logs dos agentes - [https://documentation.wazuh.com/4.7/user-manual/capabilities/log-data-collection/monitoring-log-files.html](https://documentation.wazuh.com/4.7/user-manual/capabilities/log-data-collection/monitoring-log-files.html)
+    * /var/ossec/etc/ossec.conf
 
-## Tentativa acesso ao console Mikrotik Centro
+      ```bash
+        <localfile>
+          <location>/<FILE_PATH>/file.log</location>
+          <log_format>syslog</log_format>
+        </localfile>  
+      ```
+
+## Simulando ataques no ambiente
+
+* Scan e Recon - [https://www.kali.org/tools/](https://www.kali.org/tools/)
+  * Nmap
+
+    ```bash
+    nmpa -sS -v -A -T4 –p- <host>
+    ```
+  
+  * Gobuster
+
+    ```bash
+    gobuster dir -u <url> -w <word_list>
+    ```
+
+  * Dirb
+
+    ```bash
+    dirb <url> <word_list>
+    ```
+
+  * Sqlmap
+
+    ```bash
+    sqlmap -u "<url>"
+    ```
+
+## Verificando informações coletadas
+
+* Itens de descoberta zabbix
+* Itens do template do zabbix
+* Eventos coletados pelo Wazuh
+* Eventos Coletados pelo Suricata
+
+## Trabalhando com logs
+
+```bash
+#!/bin/bash
+
+pattern=$1
+log_file_path=$2
+
+count=$(grep -c "$pattern" "$log_file_path")
+
+echo $count
+```
+
+### Busca por um padrão em um arquivo de log
 
 ```conf
-UserParameter=tentativa-acesso-console-mkCentro,/usr/local/bin/zabbix.sh "login failure for user" "/var/log/routerOS/10.2.1.1.log"
+UserParameter=<chave>,/usr/local/bin/zabbix.sh "<padrão da busca>" "/var/log/<arquivo>.log"
 ```
+
+### Pega latitude e longitude
+
+```powershell
+Add-Type -AssemblyName System.Device #Required to access System.Device.Location namespace
+$GeoWatcher = New-Object System.Device.Location.GeoCoordinateWatcher #Create the required object
+$GeoWatcher.Start() #Begin resolving current locaton
+
+while (($GeoWatcher.Status -ne 'Ready') -and ($GeoWatcher.Permission -ne 'Denied')) {
+    Start-Sleep -Milliseconds 100 #Wait for discovery.
+}  
+
+if ($GeoWatcher.Permission -eq 'Denied'){
+    Write-Error 'Access Denied for Location Information'
+} else {
+    $GeoWatcher.Position.Location.Latitude.toString().Replace(',','.')
+    $GeoWatcher.Position.Location.Longitude.toString().Replace(',','.')
+}
+```
+
+## Criando dashboards com os indicadores
+
+* Tentativas de acesso
+* Logins incorreto
+* IPs de origem
+* Scan de rede
+* Movimentação do equipamento
+
+## Configurando notificações
+
+* Severidade do alerta
+* Tipo de mídia
+* Grupo
+
+## Automatizando a criação do ambiente
+
+* Montando um yml único
+
+## Referências
+
+* [Visão geral sobre observabilidade | Microsoft Learn](https://learn.microsoft.com/pt-br/azure/security/container-secure-supply-chain/articles/container-secure-supply-chain-implementation/observability-overview)
+* [Observabilidade em segurança cibernética: o que é e por que usar? | Novared](https://novared.com.br/observabilidade-em-seguranca-cibernetica-o-que-e-e-por-que-usar/#:~:text=A%20observabilidade%20%C3%A9%20um%20processo,opera%C3%A7%C3%A3o%20de%20um%20ambiente%20digital.)
+* [Observabilidade de Segurança em Aplicações Web | GoCache](https://www.gocache.com.br/observabilidade-sobre-seguranca-e-aplicacoes/)
+* [Observabilidade na TI: o que é e quais seus 3 pilares | Softwall](https://www.softwall.com.br/blog/observabilidade-ti-o-que-e-pilares/)
+* [Como melhorar a competitividade dos negócios com observabilidade | Azion](https://www.azion.com/pt-br/blog/como-melhorar-a-competitividade-dos-negocios-com-observabilidade/#:~:text=Para%20implementar%20a%20observabilidade%20%C3%A9,suficiente%20para%20atingir%20esses%20objetivos.)
+* [Entenda o conceito de observabilidade e sua diferença para o monitoramento | InterOp](https://www.interop.com.br/blog/observabilidade/)
+* [Conceitos de Observabilidade que voce precisa saber | Tiago Dias Generoso | Medium](https://tiagodiasgeneroso.medium.com/conceitos-de-observabilidade-que-voce-precisa-saber-c066b78ccd2d)
