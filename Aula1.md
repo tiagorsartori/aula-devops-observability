@@ -486,37 +486,38 @@ volumes:
 ## Configuração das aplicações
 
 * Zabbix
-  * Agent
+  * Agent v2
     * Instalação do agente para o server e para os dispositivos monitorados
   * Scripts
     * Scripts para coleta de coordenada geográfica
     * Scripts para análise de logs
   * Itens
   * Logs
-* mysql
-  * logs
-  * permissões de acesso
-* suricata
-  * rules
+  * Templates
+* MySQL
+  * Logs
+  * Permissões de acesso
+* Suricata
+  * Rules
     * suricata-update
-  * logs
-* grafana
-  * plugins
+  * Logs
+* Grafana
+  * Plugins
     * [https://grafana.com/grafana/plugins/alexanderzobnin-zabbix-app/?tab=overview](https://grafana.com/grafana/plugins/alexanderzobnin-zabbix-app/?tab=overview)
     * [https://storage.googleapis.com/integration-artifacts/alexanderzobnin-zabbix-app/release/4.4.9/linux/alexanderzobnin-zabbix-app-4.4.9.linux_amd64.zip](https://storage.googleapis.com/integration-artifacts/alexanderzobnin-zabbix-app/release/4.4.9/linux/alexanderzobnin-zabbix-app-4.4.9.linux_amd64.zip)
     * [http://192.168.0.149:8080/api_jsonrpc.php](http://192.168.0.149:8080/api_jsonrpc.php)
-  * data sources
-    * zabbix
-* apache
-  * logs
-  * virtual hosts
-  * modulos
-* wordpress
-  * banco de dados
+  * Data sources
+    * Zabbix
+* Apache
+  * Logs
+  * Virtual hosts
+  * Modulos
+* Wordpress
+  * Banco de dados
     * Criar um banco de dados com nome bitnami_wordpress
   * config.inc.php
-  * pastas e arquivos "coringa" para os testes
-* wazuh
+  * Pastas e arquivos "coringa" para os testes
+* Wazuh
   * Instalação do agent nas VMs monitoradas
   * Nível de exibição dos alertas
     * Management -> Coonfiguration -> Edit configuration
