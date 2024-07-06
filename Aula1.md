@@ -470,10 +470,12 @@ services:
     restart: unless-stopped
     environment:
      - ALLOW_EMPTY_PASSWORD=yes
-     - WORDPRESS_DATABASE_HOST=mysql
+     - WORDPRESS_DATABASE_HOST=172.17.0.1
      - WORDPRESS_DATABASE_PORT_NUMBER=3306
-     - WORDPRESS_DATABASE_USER=bn_wordpress
+     - WORDPRESS_DATABASE_USER=root
      - WORDPRESS_DATABASE_NAME=bitnami_wordpress
+     - WORDPRESS_DATABASE_PASSWORD=123Mudar@
+     - BITNAMI_DEBUG=true
     ports:
      - '8880:8080'
      - '8843:8443'
