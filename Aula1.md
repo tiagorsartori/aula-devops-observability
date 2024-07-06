@@ -170,6 +170,12 @@ Tiago Ramos Sartori
   Service docker status
   ```
 
+  * Alias para exibição dos contêineres - executar no bash ou add no .bashrc
+
+  ```bash
+  alias dsa='docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Ports}}"'
+  ```
+
 ## Instalação dos contêineres
 
 ### Comandos úteis  
