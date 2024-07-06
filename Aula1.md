@@ -488,6 +488,8 @@ volumes:
 * Zabbix
   * Agent v2
     * Instalação do agente para o server e para os dispositivos monitorados
+      * apt install sudo
+      * usermod -aG docker zabbix
   * Scripts
     * Scripts para coleta de coordenada geográfica
     * Scripts para análise de logs
