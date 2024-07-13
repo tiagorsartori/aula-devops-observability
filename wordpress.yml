@@ -14,6 +14,7 @@ services:
      - WORDPRESS_DATABASE_NAME=bitnami_wordpress
      - WORDPRESS_DATABASE_PASSWORD=123Mudar@
      - BITNAMI_DEBUG=true
+     - TZ=America/Sao_Paulo
     ports:
      - '8880:8080'
      - '8843:8443'
